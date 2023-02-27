@@ -1,0 +1,58 @@
+<ng-container>
+  <div class="selected-user">
+    <span>{{ channel.name }} Channel</span>
+  </div>
+  <div class="chat-container ">
+    <ul class="chat-box" class="chatContainerScroll" #chatContainer>
+      <li class="chat-left">
+        <button type="button" class="btn btn-info" (click)="readMore(true)">
+          Read More <i class="fa fa-arrow-up"></i>
+        </button>
+      </li>
+      <ng-container *ngFor="let chat of chatLatestMessages;">
+      <ng-container *ngIf="chat.userId !== user.name; else chatRight">
+        <li class="chat-left">
+        <div class="chat-avatar">
+          <img src="./assets/images/{{ chat.userId}}.png" alt="User">
+          <div class="chat-name">{{ chat.userId }}</div>
+        </div>
+        <div class="chat-text">{{ chat.text }}
+        </div>
+        <div class="chat-hour">{{ chat.datetime | date: "HH:mm" }}</div>
+      </li>
+      </ng-container>
+      <ng-template #chatRight>
+      <li class="chat-right">
+        <div class="chat-hour">{{ chat.datetime | date: "HH:mm" }}
+          <ng-container *ngIf="!chat.isError; else Error">
+            <span class="fa fa-check-circle"></span>
+            <span class="chat-message">Sent</span>
+          </ng-container>
+          <ng-template #Error>
+            <span class="fa fa-exclamation-circle"></span>
+            <span class="chat-message">Error</span>
+          </ng-template>
+        </div>
+        <div class="chat-text">{{ chat.text }}
+        </div>
+        <div class="chat-avatar">
+          <img src="./assets/images/{{ chat.userId }}.png" alt="User">
+          <div class="chat-name">{{ chat.userId}}</div>
+        </div>
+      </li>
+      </ng-template>
+      </ng-container>
+      <li class="left">
+        <button type="button" class="btn btn-info" (click)="readMore(false)">
+          Read More <i class="fa fa-arrow-down"></i>
+        </button>
+      </li>
+    </ul>
+    <div class="text-right send-msg-section">
+      <textarea class="form-control" rows="3" name="chatMessage" [(ngModel)]="chatMessage" (ngModelChange)="storeMessage($event)"
+          placeholder="Type your message here..."></textarea>
+      <button type="button" class="btn btn-info mt-2" (click)="postMessage(chatMessage)">Send Message <i
+              class="fa-sharp fa-solid fa-paper-plane"></i></button>
+  </div>
+  </div>
+</ng-container>
